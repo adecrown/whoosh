@@ -30,8 +30,8 @@ export default {
 
 <style scoped>
 .button{
-    background-color: #00c4a3;
-  border: 1px solid #00c4a3;
+    background-color: red;
+  border: 1px solid red;
   color: white;
   padding: 10px 32px;
   text-align: center;
