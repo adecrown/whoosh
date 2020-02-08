@@ -1,6 +1,6 @@
 {
   "name": "@adecrown/whoosh",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -19,7 +19,8 @@
     },
     "git": {
       "tagName": "v${version}",
-      "requireCleanWorkingDir": false
+      "requireCleanWorkingDir": false,
+      "changelog": "git log --pretty=format:'* %s (%h)' [REV_RANGE]"
     },
     "github": {
       "release": true
