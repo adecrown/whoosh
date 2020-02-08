@@ -6,11 +6,17 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "build-bundle": "vue-cli-service build --target lib --name @adecrown/whoosh ./src/components/index.js"
+    "build-bundle": "vue-cli-service build --target lib --name @adecrown/whoosh ./src/components/index.js",
+    "release": "release-it"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/adecrown/whoosh.git"
+  },
+  "release-it": {
+    "github": {
+      "release": true
+    }
   },
   "dependencies": {
     "core-js": "^3.6.4",
@@ -23,6 +29,7 @@
     "babel-eslint": "^10.0.3",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.1.2",
+    "release-it": "^12.4.3",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
