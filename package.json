@@ -14,6 +14,9 @@
     "url": "https://github.com/adecrown/whoosh.git"
   },
   "release-it": {
+    "git": {
+      "tagName": "v${version}"
+    },
     "github": {
       "release": true
     }
