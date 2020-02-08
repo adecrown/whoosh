@@ -17,6 +17,7 @@
     "git": {
       "tagName": "v${version}"
     },
+    "git.requireCleanWorkingDir": false,
     "github": {
       "release": true
     }
