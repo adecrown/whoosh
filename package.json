@@ -1,6 +1,6 @@
 {
   "name": "@adecrown/whoosh",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -14,12 +14,16 @@
     "url": "https://github.com/adecrown/whoosh.git"
   },
   "release-it": {
+    "buildCommand": "npm build-bundle",
     "git": {
       "tagName": "v${version}",
       "requireCleanWorkingDir": false
     },
     "github": {
       "release": true
+    },
+    "dist": {
+      "baseDir": null
     }
   },
   "dependencies": {
