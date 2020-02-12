@@ -1,25 +1,32 @@
-import Vue from 'vue'
+//import Vue from 'vue'
 import ButtonField from './ButtonField'
-import Whoosh from './Whoosh'
+import Whoosh from './Whoosh/Whoosh'
+import {
+  events
+} from './Whoosh/events'
+//const myWhoosh = new(Vue.extend(Whoosh));
 
-const myWhoosh = new (Vue.extend(Whoosh));
+const WhooshOn = {
+  install(Vue, args = {}) {
+    console.log('Installed')
+    this.params = args
 
-export default function install (Vue) {
-        Vue.component('ButtonField',ButtonField)
+    Vue.component('ButtonField', ButtonField)
+    Vue.component('Whoosh', Whoosh)
 
-        //Vue.prototype.$whoosh = (name, age) => info(name, age)
 
-        Vue.prototype.$whoosh = {
-          success(message){
-            myWhoosh.success(message)
-          },
-          error(message){
-            myWhoosh.success(message)
-          }
-        }
-    
+    Vue.prototype.$whoosh = (params) => {
+      events.$emit('startWhoosh', params)
+    }
   }
+}
 
-  export {
-    ButtonField
-  }
+if (typeof window !== 'undefined' && window.Vue) {
+  window.Vue.use(WhooshOn)
+}
+
+export default WhooshOn
+export {
+  ButtonField,
+  Whoosh
+}
