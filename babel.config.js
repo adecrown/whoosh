@@ -14,8 +14,10 @@ module.exports = {
           }
         }]
       ],
-      "plugins": ["@babel/plugin-transform-runtime"]
+      "plugins": ["@babel/plugin-transform-runtime",{
+        "regenerator": true
+      }]
     }
   },
-  "plugins": ["@babel/plugin-syntax-dynamic-import", "transform-dynamic-import"]
+  "plugins": ["@babel/plugin-syntax-dynamic-import", "transform-dynamic-import","@babel/plugin-transform-runtime"]
 }

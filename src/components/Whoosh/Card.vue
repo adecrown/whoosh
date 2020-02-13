@@ -1,19 +1,30 @@
 <template>
+<transition name="slide-fade">
   <div
     class="card"
     :style="{'margin-bottom':setMargin}"
+    @mouseover="paused = true"
+    @mouseleave="paused = false"
   >
     <div class="card__status"></div>
-    Testings
+    <div class="card__title">{{content.title}}</div>
+    <div class="card__message">{{content.message}}</div>
   </div>
+</transition>
 </template>
+
 <script>
+import {TimerCup} from './Util'
 export default {
   props: {
     position: {
       type: Number,
       required: false,
       default: 0
+    },
+    content:{
+      type: Object,
+      required: true
     }
   },
   computed: {
@@ -22,6 +33,41 @@ export default {
       return this.position > 0 ? marg + 'px' : '0px'
     }
   },
+  data(){
+    return{
+      timer:{},
+      paused:false
+    }
+  },
+  mounted(){
+    console.log(this.content)
+    this.close()
+  },
+  watch:{
+    paused(newVal,old){
+      if(newVal){
+        console.log('pausedW')
+        this.timer.pause()
+      }else{
+        console.log('resumeW')
+        this.timer.resume()
+      }
+
+    }
+  },
+  methods:{
+    close(){
+      const vThis = this;
+      this.timer = new TimerCup(function() {
+       console.log(vThis.content)
+        vThis.$emit('close',vThis.content)
+        }, 2000);
+     /*  setTimeout(function() { 
+        console.log(vThis.content)
+        vThis.$emit('close',vThis.content)
+      }, 5000); */
+    }
+  }
 }
 </script>
 
@@ -37,8 +83,8 @@ export default {
 }
 .card__status {
   background-color: green;
-  width: 95%;
-  height: 10px;
+  width: 10px;
+  height: 190px;
   border-radius: 20px;
 }
 </style>

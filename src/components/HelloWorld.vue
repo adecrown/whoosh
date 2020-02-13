@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card />
+    <Card :content="content"/>
   </div>
 </template>
 
@@ -11,6 +11,13 @@ export default {
   components: { Card },
   props: {
     msg: String
+  },
+  data(){
+    return{
+      content:{title:"My name is "+this.id,
+               message:"This is my message "
+           }
+    }
   }
 }
 </script>
