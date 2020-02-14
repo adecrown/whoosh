@@ -1,13 +1,16 @@
 <template>
   <div>
     <transition-group name="card">
-    <Card
-      v-for="(whoosh,index) in whooshList"
-      :content="whoosh"
-      :key="whoosh.id"
-      :position="index"
-      @close="removeCard"
-    />
+      <Card
+        v-for="(whoosh,index) in whooshList"
+        :content="whoosh"
+        :key="whoosh.id"
+        :position="index"
+        @close="removeCard"
+        :masterDuration="duration"
+        :closeOnClick="closeOnClick"
+        @click="actionOnClick(whoosh)"
+      />
     </transition-group>
   </div>
 </template>
@@ -15,7 +18,7 @@
 <script>
 import Card from './Card'
 import { events } from './events.js'
-import {generateId} from './Util'
+import { generateId } from './Util'
 export default {
   name: 'Whoosh',
   components: { Card },
@@ -23,7 +26,19 @@ export default {
     return {
       show: false,
       whooshList: [],
-      id:0
+      id: 0
+    }
+  },
+  props: {
+    duration: {
+      type: Number,
+      required: false,
+      default: 0
+    },
+    closeOnClick: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   mounted() {
@@ -35,22 +50,22 @@ export default {
       event.id = generateId();
       this.whooshList.push(event)
     },
-    removeCard(event){
+    removeCard(event) {
       console.log(event)
       this.whooshList = this.whooshList.filter(x => x.id !== event.id)
-      //this.whooshList.splice(event,1)
-    
+    },
+    actionOnClick(data) {
+      if (this.closeOnClick) {
+        this.removeCard(data)
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-
-
 .card {
   transition: all 0.5s;
-
 }
 .card-enter, .card-leave-to
 /* .card-leave-active for <2.1.8 */ {
@@ -60,10 +75,6 @@ export default {
 .card-enter-to {
   opacity: 1;
   transform: scale(1);
-}
-
-.card-leave-active {
-  /*position: absolute;*/
 }
 
 .card-move {
