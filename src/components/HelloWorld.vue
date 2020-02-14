@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card :content="content"/>
+    <Card :content="content" />
   </div>
 </template>
 
@@ -12,11 +12,13 @@ export default {
   props: {
     msg: String
   },
-  data(){
-    return{
-      content:{title:"My name is "+this.id,
-               message:"This is my message "
-           }
+  data() {
+    return {
+      content: {
+        title: "My name is go sgi sisd sidsoiosdvosdin wefewuifewfiun " + this.id,
+        message: "This is my message ",
+        status: 'error'
+      }
     }
   }
 }
