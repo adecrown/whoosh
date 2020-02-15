@@ -3,6 +3,10 @@
 ## Project setup
 ```
 npm install @adecrown/whoosh
+
+or
+
+yarn add @adecrown/whoosh
 ```
 ## Basic Usage
 Inside your main.js file
@@ -29,24 +33,20 @@ this.$whoosh({
 
 ```javascript
   this.$whoosh({
-    // (optional)
-    // Notification status 'success,warn,error'
+    // (optional) Notification status 'success,warn,error'
     // custom status can also be passed here
     status: 'success',
 
-    // (optional)
-    // Notification title
+    // (optional) Notification title
     title: 'I am the title',
 
-    // Notification message
+    // (optional) Notification message
     message: 'I am the message',
 
-    // (optional)
-    // This will override the default duration and the provided duration mains.js
+    // (optional) This will override the default duration and the provided duration mains.js
     duration: 5,
 
-    // (optional)
-     // This will override the size and the provided prop size
+     // (optional) This will override the size and the provided prop size
     size: {
         width:400,
         height:250
@@ -58,7 +58,7 @@ this.$whoosh({
 
 ### Props Table
 
-All props are optional.
+All props below are optional.
 
 | Name             | Type    | Default      | Description |
 | ---              | ---     | ---          | ---         |
