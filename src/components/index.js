@@ -1,4 +1,3 @@
-//import Vue from 'vue'
 import ButtonField from './ButtonField'
 import Whoosh from './Whoosh/Whoosh'
 import {
@@ -8,7 +7,6 @@ import {isCustomStatusesDefined} from './Whoosh/Util'
 
 const WhooshOn = {
   install(Vue, args = {}) {
-    console.log('Installed')
     this.params = args
 
     Vue.component('ButtonField', ButtonField)
