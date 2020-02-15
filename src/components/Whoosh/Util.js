@@ -1,6 +1,9 @@
 export const generateId = (i => () => i++)(0)
 
-
+export const isCustomStatusesDefined = (statuses) =>{
+    return Array.isArray(statuses) && statuses.length
+  }
+  
 
 export class TimerCup {
     constructor(fn, countdown) {

@@ -1,6 +1,11 @@
 {
   "name": "@adecrown/whoosh",
-  "version": "0.1.10",
+  "description": "A Simple Vue.js Notification Library",
+  "author": {
+    "name": "adecrown",
+    "url": "http://adecrown.com"
+  },
+  "version": "0.2.0",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -9,9 +14,25 @@
     "build-bundle": "vue-cli-service build --target lib --name @adecrown/whoosh ./src/components/index.js",
     "release": "release-it"
   },
+  "license": "MIT",
+  "keywords": [
+    "vue",
+    "vuejs",
+    "notification",
+    "vue notification",
+    "vue notifications",
+    "vuejs notifications",
+    "web",
+    "toast",
+    "vue toast",
+    "whoosh"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/adecrown/whoosh.git"
+  },
+  "bugs": {
+    "url": "https://github.com/adecrown/whoosh/issues"
   },
   "release-it": {
     "hooks": {
@@ -60,7 +81,7 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "no-unused-vars":"off"
+      "no-unused-vars": "off"
     }
   },
   "browserslist": [

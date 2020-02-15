@@ -6,10 +6,14 @@
         :content="whoosh"
         :key="whoosh.id"
         :position="index"
+        :list="whooshList"
         @close="removeCard"
         :masterDuration="duration"
         :closeOnClick="closeOnClick"
         @click="actionOnClick(whoosh)"
+        :size="size"
+        :fill="fill"
+        :textColor="textColor"
       />
     </transition-group>
   </div>
@@ -19,6 +23,7 @@
 import Card from './Card'
 import { events } from './events.js'
 import { generateId } from './Util'
+import {DEFAULT_WIDTH,DEFAULT_HEIGHT} from './Constant'
 export default {
   name: 'Whoosh',
   components: { Card },
@@ -33,16 +38,35 @@ export default {
     duration: {
       type: Number,
       required: false,
-      default: 0
+      default: 5 // 5 seconds
     },
     closeOnClick: {
       type: Boolean,
       required: false,
       default: false
+    },
+    fill: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    textColor: {
+      type: String,
+      required: false,
+      default: 'black'
+    },
+    size:{
+      type: Object,
+      required: false,
+      default: () => {
+        return{
+          width:DEFAULT_WIDTH,
+          height:DEFAULT_HEIGHT
+        }
+      }
     }
   },
   mounted() {
-    console.log("Mounted Whoosh")
     events.$on('startWhoosh', this.makeAWhooshList);
   },
   methods: {
@@ -51,7 +75,6 @@ export default {
       this.whooshList.push(event)
     },
     removeCard(event) {
-      console.log(event)
       this.whooshList = this.whooshList.filter(x => x.id !== event.id)
     },
     actionOnClick(data) {
@@ -67,8 +90,7 @@ export default {
 .card {
   transition: all 0.5s;
 }
-.card-enter, .card-leave-to
-/* .card-leave-active for <2.1.8 */ {
+.card-enter, .card-leave-to {
   opacity: 0;
   transform: scale(0);
 }
@@ -76,7 +98,9 @@ export default {
   opacity: 1;
   transform: scale(1);
 }
-
+.card-leave-active {	
+  /*position: absolute;*/	
+}
 .card-move {
   opacity: 1;
   transition: all 0.5s;

@@ -4,7 +4,7 @@ import Whoosh from './Whoosh/Whoosh'
 import {
   events
 } from './Whoosh/events'
-//const myWhoosh = new(Vue.extend(Whoosh));
+import {isCustomStatusesDefined} from './Whoosh/Util'
 
 const WhooshOn = {
   install(Vue, args = {}) {
@@ -16,6 +16,8 @@ const WhooshOn = {
 
 
     Vue.prototype.$whoosh = (params) => {
+      isCustomStatusesDefined(args.statuses) ? params.statuses = args.statuses : null;
+      args.size && (args.size.width || args.size.height) ? params.generalSize = args.size : null;
       events.$emit('startWhoosh', params)
     }
   }

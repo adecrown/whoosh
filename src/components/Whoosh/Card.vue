@@ -2,27 +2,27 @@
   <transition name="slide-fade">
     <div
       class="card"
-      :style="{'margin-bottom':setMargin}"
+      :style="{'margin-bottom':setMargin,'color':textColor,'background-color': fill ? statusColor : white,width:setWidth,height:setHeight}"
       @mouseover="paused = true"
       @mouseleave="paused = false"
       @click="$emit('click')"
     >
       <div
         class="card__status"
-        :style="{'background-color': statusColor}"
+        :style="{'background-color': statusColor,height:setStatusHeight}"
+        v-if="!fill"
       ></div>
       <div class="card__body">
-        <div class="card__title">{{content.title}}</div>
-        <div class="card__message">{{content.message}}</div>
+        <div class="card__title" v-if="content.title">{{content.title}}</div>
+        <div class="card__message" v-if="content.message">{{content.message}}</div>
       </div>
     </div>
   </transition>
 </template>
 
 <script>
-import { TimerCup } from './Util'
-import { status } from './Constant'
-import { thistle } from 'color-name';
+import { TimerCup, isCustomStatusesDefined } from './Util'
+import { status, DEFAULT_HEIGHT,MARGIN_GAP } from './Constant'
 export default {
   props: {
     position: {
@@ -30,27 +30,75 @@ export default {
       required: false,
       default: 0
     },
+    list: {
+      type: Array,
+      required: false
+    },
     content: {
       type: Object,
       required: true
     },
     masterDuration: {
       type: Number,
-      required: false,
-      default: 0
+      required: true,
     },
     closeOnClick: {
       type: Boolean,
       required: false,
       default: false
+    },
+    fill: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    textColor: {
+      type: String,
+      required: false,
+      default: 'black'
+    },
+    size:{
+      type: Object,
+      required: true,
     }
   },
   computed: {
+    heightWasDefined(){
+      return this.content.size && this.content.size.height
+    },
     setMargin() {
-      const marg = this.position * 210
+      let marg = this.position * (DEFAULT_HEIGHT + MARGIN_GAP)
+        let whatsBelowSize = 0;
+        const notMe = this.list.filter((x,index) => index < this.position);
+        whatsBelowSize = notMe.reduce((a, b) => a + (this.add(b) || 0), 0);
+        if(whatsBelowSize > 0){
+        marg =  whatsBelowSize + MARGIN_GAP
+      }
+      
       return this.position > 0 ? marg + 'px' : '0px'
     },
+    setWidth(){
+      if(this.content.size && this.content.size.width){
+        return this.content.size.width+'px' 
+      }
+      return  this.size.width+'px'
+    },
+     setHeight(){
+      if(this.content.size && this.content.size.height){
+        return this.content.size.height+'px' 
+      }
+      return  this.size.height+'px'
+    },
+    setStatusHeight(){
+      if(this.content.size && this.content.size.height){
+        return (this.content.size.height - MARGIN_GAP)+'px' 
+      }
+      return (this.size.height - MARGIN_GAP)+'px'
+    },
     statusColor() {
+      if(isCustomStatusesDefined(this.content.statuses)){
+        return this.content.statuses.find(element => element.name === this.content.status).color;
+      }
       switch (this.content.status) {
         case status.success:
           return "green";
@@ -66,12 +114,10 @@ export default {
   data() {
     return {
       timer: {},
-      paused: false,
-      duration: 5, // 5 seconds
+      paused: false
     }
   },
   mounted() {
-    console.log(this.content)
     if (!this.closeOnClick) {
       this.close()
     }
@@ -80,10 +126,8 @@ export default {
     paused(newVal, old) {
       if (!this.closeOnClick) {
         if (newVal) {
-          console.log('pausedW')
           this.timer.pause()
         } else {
-          console.log('resumeW')
           this.timer.resume()
         }
       }
@@ -91,15 +135,18 @@ export default {
   },
   methods: {
     close() {
-      const useDuration = this.content.duration ?
-        this.content.duration
-        :
-        this.masterDuration > 0 ? this.masterDuration : this.duration
-      console.log(useDuration);
+      const useDuration = this.content.duration ? this.content.duration : this.masterDuration;
       this.timer = new TimerCup(() => {
         this.$emit('close', this.content);
       }, useDuration * 1000);
     },
+
+    add(whatsBelow){
+      let whatsBelowSize = 0;
+      whatsBelowSize = this.size.height;
+      whatsBelow.size && whatsBelow.size.height ? whatsBelowSize = whatsBelow.size.height : null
+      return whatsBelowSize
+    }
   }
 }
 </script>
@@ -126,9 +173,10 @@ export default {
   width: 100%;
   margin: 10px;
   text-align: left;
+  font-weight: 500;
 }
 .card__title {
-  border-bottom: black 1px solid;
+  border-bottom: #0000001a 1px solid;
   padding-bottom: 8px;
 }
 .card__message {
