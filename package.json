@@ -36,6 +36,7 @@
   },
   "release-it": {
     "hooks": {
+      "before:bump": "source app-env",
       "after:bump": "npm run build-bundle"
     },
     "git": {
