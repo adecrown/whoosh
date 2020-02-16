@@ -82,13 +82,13 @@ export default class Card extends Vue {
       }
       switch (this.content.status) {
         case status.success:
-          return "green";
+          return "#4caf50ad";
         case status.warning:
-          return "blue";
+          return "#00bcd4b0";
         case status.error:
-          return "red";
+          return "#ff0000";
         default:
-          return "yellow";
+          return "#f7a104b5";
       }
     }
 

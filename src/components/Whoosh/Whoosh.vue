@@ -24,7 +24,7 @@ import Card from './Card.vue'
 import { events } from './events'
 import { generateId } from './Util'
 import {DEFAULT_WIDTH,DEFAULT_HEIGHT} from './Constant'
-import { Component, Prop, Vue, Watch, Emit } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import {CardContent} from '../types/index' ;
 @Component({
   components: {
@@ -33,9 +33,9 @@ import {CardContent} from '../types/index' ;
 })
 export default class Whoosh extends Vue{
 
-      show = false;
-      whooshList: Array<CardContent> = [];
-      id = 0;
+  show = false;
+  whooshList: Array<CardContent> = [];
+  id = 0;
 
   @Prop({type:Number, required: false,default:5 }) private duration!: number; 
   @Prop({ type:Boolean, default: false }) private closeOnClick!: boolean ;
@@ -47,18 +47,18 @@ export default class Whoosh extends Vue{
     events.$on('startWhoosh', this.makeAWhooshList);
   }
 
-    makeAWhooshList(event: CardContent) {
-      event.id = generateId();
-      this.whooshList.push(event)
+  makeAWhooshList(event: CardContent) {
+    event.id = generateId();
+    this.whooshList.push(event)
+  }
+  removeCard(event: CardContent) {
+    this.whooshList = this.whooshList.filter(x => x.id !== event.id)
+  }
+  actionOnClick(data: CardContent) {
+    if (this.closeOnClick) {
+      this.removeCard(data)
     }
-    removeCard(event: CardContent) {
-      this.whooshList = this.whooshList.filter(x => x.id !== event.id)
-    }
-    actionOnClick(data: CardContent) {
-      if (this.closeOnClick) {
-        this.removeCard(data)
-      }
-    }
+  }
 
 }
 </script>
@@ -74,9 +74,6 @@ export default class Whoosh extends Vue{
 .card-enter-to {
   opacity: 1;
   transform: scale(1);
-}
-.card-leave-active {	
-  /*position: absolute;*/	
 }
 .card-move {
   opacity: 1;
