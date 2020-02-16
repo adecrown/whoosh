@@ -5,7 +5,7 @@
     "name": "adecrown",
     "url": "http://adecrown.com"
   },
-  "version": "0.2.4",
+  "version": "0.2.5",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
