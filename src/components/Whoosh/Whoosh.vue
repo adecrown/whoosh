@@ -37,12 +37,11 @@ export default class Whoosh extends Vue{
       whooshList: Array<CardContent> = [];
       id = 0;
 
-  @Prop({ required: false,default:5 }) private duration!: number; 
-  @Prop({ default: false }) private closeOnClick!: boolean ;
-  @Prop({ default: false }) private fill!: boolean;
-  @Prop({ default: 'black' }) private textColor!: string;
-  @Prop({ required: false ,default:{width:DEFAULT_WIDTH,
-          height:DEFAULT_HEIGHT}}) private size!: CardContent["size"];
+  @Prop({type:Number, required: false,default:5 }) private duration!: number; 
+  @Prop({ type:Boolean, default: false }) private closeOnClick!: boolean ;
+  @Prop({type:Boolean, default: false }) private fill!: boolean;
+  @Prop({type:String, default: 'black' }) private textColor!: string;
+  @Prop({type:Object, required: false ,default:() => ({width:DEFAULT_WIDTH,height:DEFAULT_HEIGHT})}) private size!: CardContent["size"];
   
   mounted() {
     events.$on('startWhoosh', this.makeAWhooshList);

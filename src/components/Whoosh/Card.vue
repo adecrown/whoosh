@@ -61,24 +61,24 @@ export default class Card extends Vue {
       if(this.content.size && this.content.size.width){
         return this.content.size.width+'px' 
       }
-      return  this.size.width+'px'
+      return  this.size!.width+'px'
     }
      get setHeight(){
       if(this.content.size && this.content.size.height){
         return this.content.size.height+'px' 
       }
-      return  this.size.height+'px'
+      return  this.size!.height+'px'
     }
     get setStatusHeight(){
       if(this.content.size && this.content.size.height){
         return (this.content.size.height - MARGIN_GAP)+'px' 
       }
 
-      return (this.size.height - MARGIN_GAP)+'px'
+      return (this.size!.height - MARGIN_GAP)+'px'
     }
     get statusColor() {
       if(isCustomStatusesDefined(this.content.statuses)){
-        return this.content.statuses.find(element  => element.name === this.content.status)!.color;
+        return this.content.statuses!.find(element  => element.name === this.content.status)!.color;
       }
       switch (this.content.status) {
         case status.success:
@@ -122,7 +122,7 @@ export default class Card extends Vue {
 
     add(whatsBelow: CardContent){
       let whatsBelowSize = 0;
-      whatsBelowSize = this.size.height;
+      whatsBelowSize = this.size!.height;
       whatsBelow.size && whatsBelow.size.height ? whatsBelowSize = whatsBelow.size.height : null
       return whatsBelowSize
     }
