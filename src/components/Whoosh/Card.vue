@@ -20,84 +20,65 @@
   </transition>
 </template>
 
-<script>
-import { TimerCup, isCustomStatusesDefined } from './Util'
-import { status, DEFAULT_HEIGHT,MARGIN_GAP } from './Constant'
-export default {
-  props: {
-    position: {
-      type: Number,
-      required: false,
-      default: 0
-    },
-    list: {
-      type: Array,
-      required: false
-    },
-    content: {
-      type: Object,
-      required: true
-    },
-    masterDuration: {
-      type: Number,
-      required: true,
-    },
-    closeOnClick: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    fill: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    textColor: {
-      type: String,
-      required: false,
-      default: 'black'
-    },
-    size:{
-      type: Object,
-      required: true,
-    }
-  },
-  computed: {
-    heightWasDefined(){
+<script lang="ts">
+import { Component, Prop, Vue, Watch, Emit } from "vue-property-decorator";
+import { TimerCup, isCustomStatusesDefined } from './Util';
+import { status, DEFAULT_HEIGHT,MARGIN_GAP } from './Constant';
+import {CardContent,TimerType} from '../types/index'
+@Component
+export default class Card extends Vue {
+  
+  @Prop({ default: 0 }) private position!: number ;
+  @Prop({ required:true}) private list!: Array<CardContent>;
+  @Prop({ required: true }) private content!: CardContent ;
+  @Prop({ required: true }) private masterDuration!: number; 
+  @Prop({ required: false }) private closeOnClick!: boolean ;
+  @Prop({ required: false }) private fill!: boolean;
+  @Prop({ required: false }) private textColor!: string;
+  @Prop({ required: true }) private size!: CardContent["size"];
+
+
+
+  timer: any = {};
+  paused = false;
+
+  get heightWasDefined(){
       return this.content.size && this.content.size.height
-    },
-    setMargin() {
+    }
+    get setMargin() {
       let marg = this.position * (DEFAULT_HEIGHT + MARGIN_GAP)
         let whatsBelowSize = 0;
         const notMe = this.list.filter((x,index) => index < this.position);
-        whatsBelowSize = notMe.reduce((a, b) => a + (this.add(b) || 0), 0);
+        whatsBelowSize = notMe.reduce((a: any, b: any) => a + (this.add(b) || 0), 0);
         if(whatsBelowSize > 0){
         marg =  whatsBelowSize + MARGIN_GAP
       }
       
       return this.position > 0 ? marg + 'px' : '0px'
-    },
-    setWidth(){
+    }
+
+    get setWidth(){
       if(this.content.size && this.content.size.width){
         return this.content.size.width+'px' 
       }
       return  this.size.width+'px'
-    },
-     setHeight(){
+    }
+     get setHeight(){
       if(this.content.size && this.content.size.height){
         return this.content.size.height+'px' 
       }
       return  this.size.height+'px'
-    },
-    setStatusHeight(){
+    }
+    get setStatusHeight(){
       if(this.content.size && this.content.size.height){
         return (this.content.size.height - MARGIN_GAP)+'px' 
       }
+
       return (this.size.height - MARGIN_GAP)+'px'
-    },
-    statusColor() {
+    }
+    get statusColor() {
       if(isCustomStatusesDefined(this.content.statuses)){
-        return this.content.statuses.find(element => element.name === this.content.status).color;
+        return this.content.statuses.find(element  => element.name === this.content.status)!.color;
       }
       switch (this.content.status) {
         case status.success:
@@ -110,20 +91,19 @@ export default {
           return "yellow";
       }
     }
-  },
-  data() {
-    return {
-      timer: {},
-      paused: false
-    }
-  },
+
+  @Emit()
+  close() {
+  return this.content
+  }
+
   mounted() {
     if (!this.closeOnClick) {
-      this.close()
+      this.startTimer()
     }
-  },
-  watch: {
-    paused(newVal, old) {
+  }
+    @Watch('paused')
+    pausedChanged(newVal: boolean, old: boolean) {
       if (!this.closeOnClick) {
         if (newVal) {
           this.timer.pause()
@@ -132,22 +112,21 @@ export default {
         }
       }
     }
-  },
-  methods: {
-    close() {
+  
+    startTimer() {
       const useDuration = this.content.duration ? this.content.duration : this.masterDuration;
       this.timer = new TimerCup(() => {
-        this.$emit('close', this.content);
+        this.close();
       }, useDuration * 1000);
-    },
+    }
 
-    add(whatsBelow){
+    add(whatsBelow: CardContent){
       let whatsBelowSize = 0;
       whatsBelowSize = this.size.height;
       whatsBelow.size && whatsBelow.size.height ? whatsBelowSize = whatsBelow.size.height : null
       return whatsBelowSize
     }
-  }
+  
 }
 </script>
 

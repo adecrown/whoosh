@@ -19,70 +19,48 @@
   </div>
 </template>
 
-<script>
-import Card from './Card'
-import { events } from './events.js'
+<script lang="ts">
+import Card from './Card.vue'
+import { events } from './events'
 import { generateId } from './Util'
 import {DEFAULT_WIDTH,DEFAULT_HEIGHT} from './Constant'
-export default {
-  name: 'Whoosh',
-  components: { Card },
-  data() {
-    return {
-      show: false,
-      whooshList: [],
-      id: 0
-    }
-  },
-  props: {
-    duration: {
-      type: Number,
-      required: false,
-      default: 5 // 5 seconds
-    },
-    closeOnClick: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    fill: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    textColor: {
-      type: String,
-      required: false,
-      default: 'black'
-    },
-    size:{
-      type: Object,
-      required: false,
-      default: () => {
-        return{
-          width:DEFAULT_WIDTH,
-          height:DEFAULT_HEIGHT
-        }
-      }
-    }
-  },
+import { Component, Prop, Vue, Watch, Emit } from "vue-property-decorator";
+import {CardContent} from '../types/index' ;
+@Component({
+  components: {
+    Card
+  }
+})
+export default class Whoosh extends Vue{
+
+      show = false;
+      whooshList: Array<CardContent> = [];
+      id = 0;
+
+  @Prop({ required: false,default:5 }) private duration!: number; 
+  @Prop({ default: false }) private closeOnClick!: boolean ;
+  @Prop({ default: false }) private fill!: boolean;
+  @Prop({ default: 'black' }) private textColor!: string;
+  @Prop({ required: false ,default:{width:DEFAULT_WIDTH,
+          height:DEFAULT_HEIGHT}}) private size!: CardContent["size"];
+  
   mounted() {
     events.$on('startWhoosh', this.makeAWhooshList);
-  },
-  methods: {
-    makeAWhooshList(event) {
+  }
+
+    makeAWhooshList(event: CardContent) {
       event.id = generateId();
       this.whooshList.push(event)
-    },
-    removeCard(event) {
+    }
+    removeCard(event: CardContent) {
       this.whooshList = this.whooshList.filter(x => x.id !== event.id)
-    },
-    actionOnClick(data) {
+    }
+    actionOnClick(data: CardContent) {
       if (this.closeOnClick) {
         this.removeCard(data)
       }
     }
-  }
+
 }
 </script>
 
