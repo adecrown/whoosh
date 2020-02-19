@@ -1,19 +1,31 @@
 <template>
   <div id="app">
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <Card :content="content" :list="list" :masterDuration="masterDuration" :size="size"/>
+    <Progress :progress="pro"/>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import HelloWorld from './components/HelloWorld.vue'
-
+import Progress from "./components/Whoosh/Progress.vue";
+import Card from "./components/Whoosh/Card.vue";
 @Component({
   components:{
-    HelloWorld
+    Progress,
+    Card
   }
 })
-export default class App extends Vue{}
+export default class App extends Vue{
+  pro = 20
+  list=[]
+  masterDuration=5
+  size={}
+  content={
+        title: "My name is go sgi sisd sidsoiosdvosdin wefewuifewfiun " ,
+        message: "This is my message ",
+        status: 'error'
+      }
+}
 </script>
 
 <style>

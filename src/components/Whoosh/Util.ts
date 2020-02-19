@@ -7,23 +7,38 @@ export const isCustomStatusesDefined = (statuses?: Array<status>) =>{
   
 
 export class TimerCup {
-    public cancel: Function;
-    public pause: Function;
-    public resume: Function;
-    constructor(fn: Function, countdown: number) {
-        let timerId: number, start: number, remaining = countdown;
-        this.cancel = function () {
-            window.clearTimeout(timerId);
-        };
-        this.pause = function () {
-            window.clearTimeout(timerId);
-            remaining -= Date.now() - start;
-        };
-        this.resume = function () {
-            start = Date.now();
-            window.clearTimeout(timerId);
-            timerId = window.setTimeout(fn, remaining);
-        };
-        this.resume();
-    }
-}
+         public cancel: Function;
+         public pause: Function;
+         public resume: Function;
+  public getTimeLeft: Function;
+         constructor(fn: Function, countdown: number) {
+           let timerId: number,
+             start: number,
+             running: boolean,
+             remaining = countdown;
+           this.cancel = function() {
+             window.clearTimeout(timerId);
+           };
+           this.pause = function() {
+             running = false;
+             window.clearTimeout(timerId);
+             remaining -= Date.now() - start;
+           };
+
+           this.getTimeLeft = function() {
+             if (running) {
+               this.pause();
+               this.resume();
+             }
+
+             return remaining;
+           };
+           this.resume = function() {
+             running = true;
+             start = Date.now();
+             window.clearTimeout(timerId);
+             timerId = window.setTimeout(fn, remaining);
+           };
+           this.resume();
+         }
+       }

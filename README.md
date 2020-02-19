@@ -66,6 +66,6 @@ All props below are optional.
 | fill             | Boolean | false        | fill the whole card with the status color |
 | closeOnClick     | Boolean | false        | notification will only close when it's clicked on |
 | textColor        | String  | black        | set the text color to what you prefer | 
-| size             | Object  | {width:500,height:200}| use it to set your prefered  width and height|
+| size             | Object  | {width:500,height:210}| use it to set your prefered  width and height|
 
 

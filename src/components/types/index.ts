@@ -12,7 +12,7 @@ export type WhooshOptions = {
   statuses?: Array<status>;
 };
 export type CardContent = {
-  id: number;
+  id?: number;
   statuses?: Array<status>;
   status?: string;
   duration?: number;

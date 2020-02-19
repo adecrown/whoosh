@@ -5,7 +5,7 @@
       :style="{
         'margin-bottom': setMargin,
         color: textColor,
-        'background-color': fill ? statusColor : white,
+        'background-color': fill ? statusColor : 'white',
         width: setWidth,
         height: setHeight
       }"
@@ -13,6 +13,9 @@
       @mouseleave="paused = false"
       @click="$emit('click')"
     >
+    
+    <Progress class="progressCard" :progress="timer.getTimeLeft()"/>
+    <div class="card-noti">
       <div
         class="card__status"
         :style="{ 'background-color': statusColor, height: setStatusHeight }"
@@ -25,6 +28,8 @@
         </div>
       </div>
     </div>
+      
+    </div>
   </transition>
 </template>
 
@@ -33,7 +38,12 @@ import { Component, Prop, Vue, Watch, Emit } from "vue-property-decorator";
 import { TimerCup, isCustomStatusesDefined } from "./Util";
 import { status, DEFAULT_HEIGHT, MARGIN_GAP } from "./Constant";
 import { CardContent, TimerType } from "../types/index";
-@Component
+import Progress from "./Progress.vue"
+@Component({
+  components:{
+    Progress
+  }
+})
 export default class Card extends Vue {
   @Prop({ default: 0 }) private position!: number;
   @Prop({ required: true }) private list!: Array<CardContent>;
@@ -44,8 +54,10 @@ export default class Card extends Vue {
   @Prop({ required: false }) private textColor!: string;
   @Prop({ required: true }) private size!: CardContent["size"];
 
-  timer: any = {};
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  timer: any = {getTimeLeft:() =>{}};
   paused = false;
+  now = 0;
 
   get heightWasDefined() {
     return this.content.size && this.content.size.height;
@@ -130,6 +142,7 @@ export default class Card extends Vue {
     this.timer = new TimerCup(() => {
       this.close();
     }, useDuration * 1000);
+    this.now = this.timer.remaining;
   }
 
   add(whatsBelow: CardContent) {
@@ -146,13 +159,13 @@ export default class Card extends Vue {
 <style scoped>
 .card {
   width: 500px;
-  height: 200px;
+  height: 210px;
   position: absolute;
   bottom: 10px;
   right: 10px;
   box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.07);
   background-color: white;
-  display: flex;
+  display: inline-block;
 }
 .card__status {
   width: 10px;
@@ -173,5 +186,15 @@ export default class Card extends Vue {
 }
 .card__message {
   padding-top: 10px;
+}
+.progressCard{
+position: relative;
+float: left;
+}
+.card-noti{
+display: flex;
+position: relative;
+float: left;
+width: 100%;
 }
 </style>

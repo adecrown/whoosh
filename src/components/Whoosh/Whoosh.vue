@@ -53,6 +53,7 @@ export default class Whoosh extends Vue {
   }
 
   makeAWhooshList(event: CardContent) {
+    console.log(document.hasFocus())
     event.id = generateId();
     this.whooshList.push(event);
   }
