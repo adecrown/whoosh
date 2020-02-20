@@ -14,7 +14,7 @@
       @click="$emit('click')"
     >
     
-    <Progress class="progressCard" :progress="timer.getTimeLeft()"/>
+    <Progress class="progressCard" :progress="moveProgress"/>
     <div class="card-noti">
       <div
         class="card__status"
@@ -55,9 +55,15 @@ export default class Card extends Vue {
   @Prop({ required: true }) private size!: CardContent["size"];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  timer: any = {getTimeLeft:() =>{}};
+  timer: any = {getTimeLeft:() =>{return 6}};
   paused = false;
   now = 0;
+
+  get moveProgress(){
+    const total = this.useDuration() * 1000;
+    const completed = ((total - this.now ) / total) * 100
+    return completed
+  }
 
   get heightWasDefined() {
     return this.content.size && this.content.size.height;
@@ -134,17 +140,29 @@ export default class Card extends Vue {
       }
     }
   }
-
-  startTimer() {
-    const useDuration = this.content.duration
+  useDuration(): number{
+    return this.content.duration
       ? this.content.duration
       : this.masterDuration;
-    this.timer = new TimerCup(() => {
-      this.close();
-    }, useDuration * 1000);
-    this.now = this.timer.remaining;
+
   }
 
+  startTimer() {
+    this.timer = new TimerCup(() => {
+      this.close();
+    }, (this.useDuration() * 1000));
+    this.timerP();
+  }
+  timerP() {
+       // const vm = this;
+        const setIntervalRef2 = setInterval(() =>{
+          this.now = this.timer.getTimeLeft();
+          if (this.now <= 0) {
+            clearInterval(setIntervalRef2);
+            //this.completed = true;
+          }
+        }, 17);
+    }
   add(whatsBelow: CardContent) {
     let whatsBelowSize = 0;
     whatsBelowSize = this.size!.height;

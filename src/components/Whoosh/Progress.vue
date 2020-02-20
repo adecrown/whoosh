@@ -13,6 +13,34 @@
         type:Number,
         required:true
       }
+    },
+    data() { 
+      return{
+       // progress:0,
+        completed: false,
+        tempo: 250,
+      }
+    },
+    created() {
+      //this.timer(this.tempo)
+    },
+    methods: 
+    {
+      timer(tempo) {
+       // const vm = this;
+        const setIntervalRef = setInterval(() =>{
+          this.progress++;
+          if (this.progress == 100) {
+            clearInterval(setIntervalRef);
+            this.completed = true;
+          }
+        }, tempo);
+      },
+      restart() {
+        this.completed = false;
+        this.progress = 0;
+        this.timer(this.tempo);
+      }
     }
   }
 </script>
