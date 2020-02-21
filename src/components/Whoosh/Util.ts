@@ -3,14 +3,14 @@ export const generateId = (i => () => i++)(0)
 
 export const isCustomStatusesDefined = (statuses?: Array<status>) =>{
     return Array.isArray(statuses) && statuses.length
-  }
+  };
   
 
 export class TimerCup {
          public cancel: Function;
          public pause: Function;
          public resume: Function;
-  public getTimeLeft: Function;
+         public getTimeLeft: Function;
          constructor(fn: Function, countdown: number) {
            let timerId: number,
              start: number,
@@ -41,4 +41,4 @@ export class TimerCup {
            };
            this.resume();
          }
-       }
+}

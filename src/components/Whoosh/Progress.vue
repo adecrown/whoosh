@@ -1,60 +1,30 @@
 <template>
   <div class="progress">
-    <div class="progress__indicator" :style="{'width':progress+'%'}">
-  </div>
+    <div class="progress__indicator" :style="{'width':progress+'%','background-color':color}"></div>
   </div>
 </template>
 
-<script>
-  export default {
-    name:'Progress',
-    props:{
-      progress:{
-        type:Number,
-        required:true
-      }
-    },
-    data() { 
-      return{
-       // progress:0,
-        completed: false,
-        tempo: 250,
-      }
-    },
-    created() {
-      //this.timer(this.tempo)
-    },
-    methods: 
-    {
-      timer(tempo) {
-       // const vm = this;
-        const setIntervalRef = setInterval(() =>{
-          this.progress++;
-          if (this.progress == 100) {
-            clearInterval(setIntervalRef);
-            this.completed = true;
-          }
-        }, tempo);
-      },
-      restart() {
-        this.completed = false;
-        this.progress = 0;
-        this.timer(this.tempo);
-      }
-    }
-  }
+<script lang="ts">
+import { Component, Prop, Vue } from "vue-property-decorator";
+@Component
+export default class Progress extends Vue {
+  @Prop({ type: Number, required: false, default: 0 })
+  private progress!: number;
+  @Prop({ type: String, required: false, default: "#dcd9d9" })
+  private color!: string;
+}
 </script>
 
 <style scoped>
-.progress{
+.progress {
   width: 100%;
-  height: 10px;
-  background-color: red
+  height: 5px;
+  background-color: transparent;
 }
-.progress__indicator{
+.progress__indicator {
   width: 0%;
   max-width: 100%;
-  height: 10px;
-  background-color: aquamarine
+  height: 5px;
+  border-radius: 20px;
 }
 </style>

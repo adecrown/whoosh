@@ -1,30 +1,33 @@
 <template>
   <div id="app">
-    <Card :content="content" :list="list" :masterDuration="masterDuration" :size="size"/>
-    <Progress :progress="pro"/>
+    <Card
+      :content="content"
+      :list="list"
+      :masterDuration="masterDuration"
+      :size="size"
+      progressColor="red"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Progress from "./components/Whoosh/Progress.vue";
 import Card from "./components/Whoosh/Card.vue";
 @Component({
-  components:{
-    Progress,
+  components: {
     Card
   }
 })
-export default class App extends Vue{
-  pro = 20
-  list=[]
-  masterDuration=5
-  size={}
-  content={
-        title: "My name is go sgi sisd sidsoiosdvosdin wefewuifewfiun " ,
-        message: "This is my message ",
-        status: 'error'
-      }
+export default class App extends Vue {
+  pro = 20;
+  list = [];
+  masterDuration = 5;
+  size = {};
+  content = {
+    title: "My name is go sgi sisd sidsoiosdvosdin wefewuifewfiun ",
+    message: "This is my message ",
+    status: "error"
+  };
 }
 </script>
 

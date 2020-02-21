@@ -14,6 +14,7 @@
         :size="size"
         :fill="fill"
         :textColor="textColor"
+        :progressColor="progressColor"
       />
     </transition-group>
   </div>
@@ -41,6 +42,7 @@ export default class Whoosh extends Vue {
   @Prop({ type: Boolean, default: false }) private closeOnClick!: boolean;
   @Prop({ type: Boolean, default: false }) private fill!: boolean;
   @Prop({ type: String, default: "black" }) private textColor!: string;
+  @Prop({ type: String, required: false }) private progressColor!: string;
   @Prop({
     type: Object,
     required: false,
@@ -53,7 +55,6 @@ export default class Whoosh extends Vue {
   }
 
   makeAWhooshList(event: CardContent) {
-    console.log(document.hasFocus())
     event.id = generateId();
     this.whooshList.push(event);
   }

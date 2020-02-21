@@ -13,61 +13,64 @@
       @mouseleave="paused = false"
       @click="$emit('click')"
     >
-    
-    <Progress class="progressCard" :progress="moveProgress"/>
-    <div class="card-noti">
-      <div
-        class="card__status"
-        :style="{ 'background-color': statusColor, height: setStatusHeight }"
-        v-if="!fill"
-      ></div>
-      <div class="card__body">
-        <div class="card__title" v-if="content.title">{{ content.title }}</div>
-        <div class="card__message" v-if="content.message">
-          {{ content.message }}
+      <Progress
+        class="progressCard"
+        :progress="moveProgress"
+        v-if="!closeOnClick"
+        :color="progressColor"
+      />
+      <div class="card-noti">
+        <div
+          class="card__status"
+          :style="{ 'background-color': statusColor, height: setStatusHeight }"
+          v-if="!fill"
+        ></div>
+        <div class="card__body">
+          <div class="card__title" v-if="content.title">{{ content.title }}</div>
+          <div class="card__message" v-if="content.message">{{ content.message }}</div>
         </div>
       </div>
-    </div>
-      
     </div>
   </transition>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch, Emit } from "vue-property-decorator";
-import { TimerCup, isCustomStatusesDefined } from "./Util";
-import { status, DEFAULT_HEIGHT, MARGIN_GAP } from "./Constant";
-import { CardContent, TimerType } from "../types/index";
-import Progress from "./Progress.vue"
+import { Component, Emit, Prop, Vue, Watch } from "vue-property-decorator";
+import { isCustomStatusesDefined, TimerCup } from "./Util";
+import { DEFAULT_HEIGHT, MARGIN_GAP, status } from "./Constant";
+import { CardContent } from "../types/index";
+import Progress from "./Progress.vue";
+
 @Component({
-  components:{
+  components: {
     Progress
   }
 })
 export default class Card extends Vue {
-  @Prop({ default: 0 }) private position!: number;
-  @Prop({ required: true }) private list!: Array<CardContent>;
-  @Prop({ required: true }) private content!: CardContent;
-  @Prop({ required: true }) private masterDuration!: number;
-  @Prop({ required: false }) private closeOnClick!: boolean;
-  @Prop({ required: false }) private fill!: boolean;
-  @Prop({ required: false }) private textColor!: string;
-  @Prop({ required: true }) private size!: CardContent["size"];
+  @Prop({ type: Number, default: 0 }) private position!: number;
+  @Prop({ type: Array, required: true }) private list!: Array<CardContent>;
+  @Prop({ type: Object, required: true }) private content!: CardContent;
+  @Prop({ type: Number, required: true }) private masterDuration!: number;
+  @Prop({ type: Boolean, required: false }) private closeOnClick!: boolean;
+  @Prop({ type: Boolean, required: false }) private fill!: boolean;
+  @Prop({ type: String, required: false }) private textColor!: string;
+  @Prop({ type: String, required: false }) private progressColor!: string;
+  @Prop({ type: Object, required: true }) private size!: CardContent["size"];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  timer: any = {getTimeLeft:() =>{return 6}};
+  timer: any = {
+    getTimeLeft: () => {
+      return 0;
+    }
+  };
   paused = false;
   now = 0;
 
-  get moveProgress(){
-    const total = this.useDuration() * 1000;
-    const completed = ((total - this.now ) / total) * 100
-    return completed
+  get moveProgress() {
+    const total = this.useDuration() * 1000; //1000 = 1 seconds;
+    return ((total - this.now) / total) * 100;
   }
 
-  get heightWasDefined() {
-    return this.content.size && this.content.size.height;
-  }
   get setMargin() {
     let marg = this.position * (DEFAULT_HEIGHT + MARGIN_GAP);
     let whatsBelowSize = 0;
@@ -89,19 +92,23 @@ export default class Card extends Vue {
     }
     return this.size!.width + "px";
   }
+
   get setHeight() {
     if (this.content.size && this.content.size.height) {
       return this.content.size.height + "px";
     }
     return this.size!.height + "px";
   }
+
   get setStatusHeight() {
     if (this.content.size && this.content.size.height) {
-      return this.content.size.height - MARGIN_GAP + "px";
+      return (
+        this.isProgressVisible(this.content.size.height - MARGIN_GAP) + "px"
+      );
     }
-
-    return this.size!.height - MARGIN_GAP + "px";
+    return this.isProgressVisible(this.size!.height - MARGIN_GAP) + "px";
   }
+
   get statusColor() {
     if (isCustomStatusesDefined(this.content.statuses)) {
       return this.content.statuses!.find(
@@ -130,6 +137,7 @@ export default class Card extends Vue {
       this.startTimer();
     }
   }
+
   @Watch("paused")
   pausedChanged(newVal: boolean, old: boolean) {
     if (!this.closeOnClick) {
@@ -140,31 +148,29 @@ export default class Card extends Vue {
       }
     }
   }
-  useDuration(): number{
-    return this.content.duration
-      ? this.content.duration
-      : this.masterDuration;
-
+  useDuration(): number {
+    return this.content.duration ? this.content.duration : this.masterDuration;
   }
 
+  isProgressVisible(height: number) {
+    return this.closeOnClick ? height : height - 5;
+  }
   startTimer() {
     this.timer = new TimerCup(() => {
       this.close();
-    }, (this.useDuration() * 1000));
-    this.timerP();
+    }, this.useDuration() * 1000);
+    this.getSetTimeOutTimeLeft();
   }
-  timerP() {
-       // const vm = this;
-        const setIntervalRef2 = setInterval(() =>{
-          this.now = this.timer.getTimeLeft();
-          if (this.now <= 0) {
-            clearInterval(setIntervalRef2);
-            //this.completed = true;
-          }
-        }, 17);
-    }
+  getSetTimeOutTimeLeft() {
+    const setIntervalTRef = setInterval(() => {
+      this.now = this.timer.getTimeLeft();
+      if (this.now <= 0) {
+        clearInterval(setIntervalTRef);
+      }
+    }, 17);
+  }
   add(whatsBelow: CardContent) {
-    let whatsBelowSize = 0;
+    let whatsBelowSize: number;
     whatsBelowSize = this.size!.height;
     whatsBelow.size && whatsBelow.size.height
       ? (whatsBelowSize = whatsBelow.size.height)
@@ -177,11 +183,11 @@ export default class Card extends Vue {
 <style scoped>
 .card {
   width: 500px;
-  height: 210px;
+  height: 200px;
   position: absolute;
   bottom: 10px;
   right: 10px;
-  box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.07);
+  box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.2);
   background-color: white;
   display: inline-block;
 }
@@ -205,14 +211,14 @@ export default class Card extends Vue {
 .card__message {
   padding-top: 10px;
 }
-.progressCard{
-position: relative;
-float: left;
+.progressCard {
+  position: relative;
+  float: left;
 }
-.card-noti{
-display: flex;
-position: relative;
-float: left;
-width: 100%;
+.card-noti {
+  display: flex;
+  position: relative;
+  float: left;
+  width: 100%;
 }
 </style>
