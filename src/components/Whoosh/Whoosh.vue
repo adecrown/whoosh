@@ -15,6 +15,8 @@
         :fill="fill"
         :textColor="textColor"
         :progressColor="progressColor"
+        :messageStyle="messageStyle"
+        :titleStyle="titleStyle"
       />
     </transition-group>
   </div>
@@ -42,6 +44,8 @@ export default class Whoosh extends Vue {
   @Prop({ type: Boolean, default: false }) private closeOnClick!: boolean;
   @Prop({ type: Boolean, default: false }) private fill!: boolean;
   @Prop({ type: String, default: "black" }) private textColor!: string;
+  @Prop({ type: Object, required: false }) private messageStyle!: object;
+  @Prop({ type: Object, required: false }) private titleStyle!: object;
   @Prop({ type: String, required: false }) private progressColor!: string;
   @Prop({
     type: Object,
