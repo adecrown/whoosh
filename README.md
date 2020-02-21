@@ -105,6 +105,11 @@ If the default status (success, error, warn) are not enough or not to your taste
     message: "Hello Testing"
   });
 ```
-The defualt statuses are still available along with your custom ones
-
+ The defualt statuses are still available along with your custom ones but you can also overide the color of the default statuses by adding it to the statuses array
+```javascript
+  {
+    name: 'error',
+    color: 'black'
+  }
+```
 
