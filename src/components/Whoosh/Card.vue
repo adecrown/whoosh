@@ -26,8 +26,16 @@
           v-if="!fill"
         ></div>
         <div class="card__body">
-          <div class="card__title" v-if="content.title">{{ content.title }}</div>
-          <div class="card__message" v-if="content.message">{{ content.message }}</div>
+          <div
+            class="card__title"
+            v-if="content.title"
+            :style="titleStyle"
+          >{{ content.title }}</div>
+          <div
+            class="card__message"
+            v-if="content.message"
+            :style="messageStyle"
+          >{{ content.message }}</div>
         </div>
       </div>
     </div>
@@ -54,6 +62,8 @@ export default class Card extends Vue {
   @Prop({ type: Boolean, required: false }) private closeOnClick!: boolean;
   @Prop({ type: Boolean, required: false }) private fill!: boolean;
   @Prop({ type: String, required: false }) private textColor!: string;
+  @Prop({ type: Object, required: false }) private messageStyle!: object;
+  @Prop({ type: Object, required: false }) private titleStyle!: object;
   @Prop({ type: String, required: false }) private progressColor!: string;
   @Prop({ type: Object, required: true }) private size!: CardContent["size"];
 
@@ -111,9 +121,12 @@ export default class Card extends Vue {
 
   get statusColor() {
     if (isCustomStatusesDefined(this.content.statuses)) {
-      return this.content.statuses!.find(
+      const isCustom = this.content.statuses!.find(
         element => element.name === this.content.status
-      )!.color;
+      );
+      if (isCustom) {
+        return isCustom.color;
+      }
     }
     switch (this.content.status) {
       case status.success:
