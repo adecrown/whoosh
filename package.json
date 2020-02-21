@@ -5,7 +5,7 @@
     "name": "adecrown",
     "url": "http://adecrown.com"
   },
-  "version": "0.2.5",
+  "version": "0.2.6",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -36,8 +36,8 @@
   },
   "release-it": {
     "hooks": {
-      "before:bump": "source app-env",
-      "after:bump": "npm run build-bundle"
+      "before:init": "source app-env",
+      "before:bump": "npm run build-bundle"
     },
     "git": {
       "tagName": "v${version}",
