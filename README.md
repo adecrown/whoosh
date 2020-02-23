@@ -75,41 +75,43 @@ All props below are optional.
 | messageStyle  | Object  |                        | give a custom style to the message section                             |
 | titleStyle    | Object  |                        | give a custom style to the title section                               |
 
-
-
 #### Custom Status
+
 If the default status (success, error, warn) are not enough or not to your taste, you can create your own custom statuses which is an array of objects status and each object requires a name and color.
 
-  Inside your main.js file add the options parameter like below.
+Inside your main.js file add the options parameter like below.
 
-  ```javascript
-  import Whoosh from "@adecrown/whoosh";
-  Vue.use(Whoosh,{
-    statuses:[
-      {
-        name: 'Testing',
-        color: 'red'
-      },
-       {
-        name: 'Testing 3',
-        color: 'green'
-      }
-    ]
-  });
-  ```
-  Use Whoosh as normal to call your custom status
-  ```javascript
-  this.$whoosh({
-    status: "Testing",
-    title: "This is my custom status",
-    message: "Hello Testing"
-  });
+```javascript
+import Whoosh from "@adecrown/whoosh";
+Vue.use(Whoosh, {
+  statuses: [
+    {
+      name: "Testing",
+      color: "red"
+    },
+    {
+      name: "Testing 3",
+      color: "green"
+    }
+  ]
+});
 ```
- The defualt statuses are still available along with your custom ones but you can also overide the color of the default statuses by adding it to the statuses array
+
+Use Whoosh as normal to call your custom status
+
+```javascript
+this.$whoosh({
+  status: "Testing",
+  title: "This is my custom status",
+  message: "Hello Testing"
+});
+```
+
+The defualt statuses are still available along with your custom ones but you can also override the color of the default statuses by adding it to the statuses array
+
 ```javascript
   {
     name: 'error',
     color: 'black'
   }
 ```
-

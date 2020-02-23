@@ -90,9 +90,8 @@ export default class Card extends Vue {
       0
     );
     if (whatsBelowSize > 0) {
-      marg = whatsBelowSize + MARGIN_GAP;
+      marg = whatsBelowSize + (MARGIN_GAP * this.position);
     }
-
     return this.position > 0 ? marg + "px" : "0px";
   }
 
