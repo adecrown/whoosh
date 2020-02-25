@@ -17,6 +17,7 @@
         :progressColor="progressColor"
         :messageStyle="messageStyle"
         :titleStyle="titleStyle"
+        :display="display"
       />
     </transition-group>
   </div>
@@ -53,6 +54,8 @@ export default class Whoosh extends Vue {
     default: () => ({ width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT })
   })
   private size!: CardContent["size"];
+  @Prop({ type: String, required: false, default:'right',validator: (value) => {return value ===  'right' || value ===  'left'} })
+  private display!: 'right' | 'left';
 
   mounted() {
     events.$on("startWhoosh", this.makeAWhooshList);

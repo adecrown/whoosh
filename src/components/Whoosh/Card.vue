@@ -2,13 +2,7 @@
   <transition name="slide-fade">
     <div
       class="card"
-      :style="{
-        'margin-bottom': setMargin,
-        color: textColor,
-        'background-color': fill ? statusColor : 'white',
-        width: setWidth,
-        height: setHeight
-      }"
+      :style="mainStyle"
       @mouseover="paused = true"
       @mouseleave="paused = false"
       @click="$emit('click')"
@@ -22,10 +16,11 @@
       <div class="card-noti">
         <div
           class="card__status"
+          :class="{'card__status-left':display==='left'}"
           :style="{ 'background-color': statusColor, height: setStatusHeight }"
           v-if="!fill"
         ></div>
-        <div class="card__body">
+        <div class="card__body" :class="{'card__body-left':display==='left' && !fill}">
           <div
             class="card__title"
             v-if="content.title"
@@ -66,6 +61,8 @@ export default class Card extends Vue {
   @Prop({ type: Object, required: false }) private titleStyle!: object;
   @Prop({ type: String, required: false }) private progressColor!: string;
   @Prop({ type: Object, required: true }) private size!: CardContent["size"];
+  @Prop({ type: String, required: true, validator: (value) => {return value ===  'right' || value ===  'left'} })
+   private display!: 'right' | 'left';
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   timer: any = {
@@ -76,6 +73,18 @@ export default class Card extends Vue {
   paused = false;
   now = 0;
 
+  get mainStyle(){
+    const style = {
+    'margin-bottom': this.setMargin,
+    color: this.textColor,
+    'background-color': this.fill ? this.statusColor : 'white',
+    width: this.setWidth,
+    height: this.setHeight,
+    [this.display]:"10px"
+    }
+
+    return style
+  }
   get moveProgress() {
     const total = this.useDuration() * 1000; //1000 = 1 seconds;
     return ((total - this.now) / total) * 100;
@@ -210,11 +219,18 @@ export default class Card extends Vue {
   margin-top: 5px;
   margin-left: 5px;
 }
+.card__status-left {
+  position: absolute;
+  right: 5px;
+}
 .card__body {
   width: 100%;
   margin: 10px;
   text-align: left;
   font-weight: 500;
+}
+.card__body-left{
+margin-right: 20px
 }
 .card__title {
   border-bottom: #0000001a 1px solid;
