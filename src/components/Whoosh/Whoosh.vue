@@ -67,6 +67,7 @@ export default class Whoosh extends Vue {
   }
   removeCard(event: CardContent) {
     this.whooshList = this.whooshList.filter(x => x.id !== event.id);
+    event.onClose ? event.onClose() : null;
   }
   actionOnClick(data: CardContent) {
     if (this.closeOnClick) {

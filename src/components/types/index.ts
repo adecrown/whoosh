@@ -22,4 +22,5 @@ export type CardContent = {
     width: number;
     height: number;
   };
+  onClose?: Function;
 };

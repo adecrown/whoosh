@@ -57,6 +57,10 @@ this.$whoosh({
     width: 400,
     height: 250
   }
+
+  // (optional) Provide a callback function that gets called when the notification closes
+  onClose: () =>{}
+
 });
 ```
 
