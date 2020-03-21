@@ -16,16 +16,23 @@
   },
   "license": "MIT",
   "keywords": [
+    "adecrown",
     "vue",
     "vuejs",
     "notification",
+    "Vue.js Notification Library",
     "vue notification",
     "vue notifications",
     "vuejs notifications",
+    "simple vue notification",
     "web",
     "toast",
     "vue toast",
-    "whoosh"
+    "whoosh",
+    "whoosh notification",
+    "notify",
+    "vue notify",
+    "alert"
   ],
   "repository": {
     "type": "git",
