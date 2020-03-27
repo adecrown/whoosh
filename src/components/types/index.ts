@@ -4,6 +4,22 @@ export interface status {
   color: string;
 }
 
+export interface expandData {
+  data: string | object;
+  height: number;
+  isComponent?: boolean;
+  noBackground?: boolean;
+  buttonColor?: string;
+  hideHeader?: boolean;
+  headerStyle?: object;
+}
+
+export interface expandStyle {
+  width: string;
+  height: string;
+  "background-color": string;
+}
+
 export interface TimerType {
   pause: Function;
   resume: Function;
@@ -22,5 +38,6 @@ export type CardContent = {
     width: number;
     height: number;
   };
+  expandable?: expandData;
   onClose?: Function;
 };

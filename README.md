@@ -56,10 +56,21 @@ this.$whoosh({
   size: {
     width: 400,
     height: 250
-  }
+  },
 
   // (optional) Provide a callback function that gets called when the notification closes
-  onClose: () =>{}
+  onClose: () =>{},
+
+  // (optional) allows the notification to reveal extra data
+  expandable:{
+    data:"New Data" | Login // (required) string or a registered component,
+    height:600, //(optional) will expand to this height
+    isComponent:false, //(optional) but required and should be set to true if expandable is to display a component
+    noBackground: boolean // (optional);
+    buttonColor: string // (optional);
+    hideHeader: boolean // (optional);
+    headerStyle: object // (optional);
+  },
 
 });
 ```

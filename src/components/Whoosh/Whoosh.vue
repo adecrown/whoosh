@@ -1,7 +1,7 @@
 <template>
   <div>
     <transition-group name="card">
-      <Card
+      <DefaultCard
         v-for="(whoosh, index) in whooshList"
         :content="whoosh"
         :key="whoosh.id"
@@ -18,13 +18,15 @@
         :messageStyle="messageStyle"
         :titleStyle="titleStyle"
         :display="display"
+        :expandable="whoosh.expandable"
+        @expand="removeOthers($event, whoosh)"
       />
     </transition-group>
   </div>
 </template>
 
 <script lang="ts">
-import Card from "./Card.vue";
+import DefaultCard from "./DefaultCard.vue";
 import { events } from "./events";
 import { generateId } from "./Util";
 import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from "./Constant";
@@ -32,12 +34,14 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { CardContent } from "../types/index";
 @Component({
   components: {
-    Card
+    DefaultCard
   }
 })
 export default class Whoosh extends Vue {
   show = false;
   whooshList: Array<CardContent> = [];
+  pendingWhooshList: Array<CardContent> = [];
+  activatePending = false;
   id = 0;
 
   @Prop({ type: Number, required: false, default: 5 })
@@ -54,8 +58,15 @@ export default class Whoosh extends Vue {
     default: () => ({ width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT })
   })
   private size!: CardContent["size"];
-  @Prop({ type: String, required: false, default:'right',validator: (value) => {return value ===  'right' || value ===  'left'} })
-  private display!: 'right' | 'left';
+  @Prop({
+    type: String,
+    required: false,
+    default: "right",
+    validator: value => {
+      return value === "right" || value === "left";
+    }
+  })
+  private display!: "right" | "left";
 
   mounted() {
     events.$on("startWhoosh", this.makeAWhooshList);
@@ -63,12 +74,27 @@ export default class Whoosh extends Vue {
 
   makeAWhooshList(event: CardContent) {
     event.id = generateId();
-    this.whooshList.push(event);
+    this.activatePending
+      ? this.pendingWhooshList.push(event)
+      : this.whooshList.push(event);
   }
+
   removeCard(event: CardContent) {
     this.whooshList = this.whooshList.filter(x => x.id !== event.id);
     event.onClose ? event.onClose() : null;
   }
+
+  removeOthers(expanded: boolean, content: CardContent) {
+    if (expanded) {
+      this.activatePending = true;
+      this.whooshList = this.whooshList.filter(x => x.id === content.id);
+    } else {
+      this.activatePending = false;
+      this.whooshList.push(...this.pendingWhooshList);
+      this.pendingWhooshList = [];
+    }
+  }
+
   actionOnClick(data: CardContent) {
     if (this.closeOnClick) {
       this.removeCard(data);

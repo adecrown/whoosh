@@ -2,11 +2,13 @@ import Whoosh from "./Whoosh/Whoosh.vue";
 import { events } from "./Whoosh/events";
 import { isCustomStatusesDefined } from "./Whoosh/Util";
 import { CardContent, WhooshOptions } from "./types/index";
-import Vue from 'vue';
+import Card from "./Whoosh/Card.vue";
+
+
 const WhooshOn = {
   install(Vue: any, options: WhooshOptions = {}) {
-
     Vue.component("Whoosh", Whoosh);
+    Vue.component("Card", Card);
 
     Vue.prototype.$whoosh = (params: CardContent = {}) => {
       isCustomStatusesDefined(options.statuses)
@@ -14,7 +16,6 @@ const WhooshOn = {
         : null;
       events.$emit("startWhoosh", params);
     };
-
   }
 };
 
@@ -23,4 +24,4 @@ if (typeof window !== "undefined" && window.Vue) {
 }
 
 export default WhooshOn;
-export { Whoosh };
+export { Whoosh, Card };
