@@ -79,19 +79,19 @@ this.$whoosh({
 
 All props below are optional.
 
-| Name          | Type    | Default                | Description                                                            |
-| ------------- | ------- | ---------------------- | ---------------------------------------------------------------------- |
-| duration      | Number  | 5                      | how long you want the notification to stay on for (5 equals 5 seconds) |
-| fill          | Boolean | false                  | fill the whole card with the status color                              |
-| closeOnClick  | Boolean | false                  | notification will only close when it's clicked on                      |
-| textColor     | String  | black                  | set the text color to what you prefer                                  |
-| progressColor | String  | #dcd9d9                | set the progress color to what you prefer                              |
-| size          | Object  | {width:500,height:210} | use it to set your prefered width and height                           |
-| messageStyle  | Object  |                        | give a custom style to the message section                             |
-| titleStyle    | Object  |                        | give a custom style to the title section                               |
-| display | left or right | right| controls which side the notification should come out from |
-| mobileDisplay | top or bottom | top | controls which position the notification should be displayed on mobile
-| isResponsive |  Boolean | true | handles responsiveness of notifications. Set it to false if you don't want the mobile view.
+| Name          | Type          | Default                | Description                                                                                 |
+| ------------- | ------------- | ---------------------- | ------------------------------------------------------------------------------------------- |
+| duration      | Number        | 5                      | how long you want the notification to stay on for (5 equals 5 seconds)                      |
+| fill          | Boolean       | false                  | fill the whole card with the status color                                                   |
+| closeOnClick  | Boolean       | false                  | notification will only close when it's clicked on                                           |
+| textColor     | String        | black                  | set the text color to what you prefer                                                       |
+| progressColor | String        | #dcd9d9                | set the progress color to what you prefer                                                   |
+| size          | Object        | {width:500,height:210} | use it to set your prefered width and height                                                |
+| messageStyle  | Object        |                        | give a custom style to the message section                                                  |
+| titleStyle    | Object        |                        | give a custom style to the title section                                                    |
+| display       | left or right | right                  | controls which side the notification should come out from                                   |
+| mobileDisplay | top or bottom | top                    | controls which position the notification should be displayed on mobile                      |
+| isResponsive  | Boolean       | true                   | handles responsiveness of notifications. Set it to false if you don't want the mobile view. |
 
 #### Custom Status
 

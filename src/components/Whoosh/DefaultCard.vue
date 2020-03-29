@@ -1,67 +1,68 @@
 <template>
-  <transition name="slide-fade">
-    <Mobile 
-    v-if="isMobile"
-    @click="$emit('click')" 
-    :textColor="textColor" 
-    :content="content" 
-    :statusColor="statusColor"
-    :position="position"
-    :closeOnClick="closeOnClick"
-    :progressColor="progressColor"
-    :moveProgress="moveProgress"
-    :mobileDisplay="mobileDisplay"
-  />
-    <div v-else>
-    <ExpandedCard 
-      v-if="expand" 
-      @expandDefault="expandDefault" 
-      :data="expandable" 
-      :defaultContent="content" 
-      :defStyle="mainStyle"
-      :fill="fill" 
-      :statusColor="statusColor"
-      :display="display"
-    />
-    <Card
-      v-else
-      :mainStyle="mainStyle"
-    >
-      <More 
-        @click="expandDefault" 
-        :display="display" 
-        :expand="expand" 
-        :color="buttonColor" 
-        v-if="expandable"
+  <transition>
+    <transition name="mobile-fade" v-if="isMobile">
+      <Mobile 
+        @click="$emit('click')" 
+        :textColor="textColor" 
+        :content="content" 
+        :statusColor="statusColor"
+        :position="position"
+        :closeOnClick="closeOnClick"
+        :progressColor="progressColor"
+        :moveProgress="moveProgress"
+        :mobileDisplay="mobileDisplay"
       />
-      <Progress
-        class="progressdefault"
-        :progress="moveProgress"
-        v-if="!closeOnClick"
-        :color="progressColor"
+    </transition>
+    <transition name="slide-fade" v-else>
+      <ExpandedCard 
+        v-if="expand" 
+        @expandDefault="expandDefault" 
+        :data="expandable" 
+        :defaultContent="content" 
+        :defStyle="mainStyle"
+        :fill="fill" 
+        :statusColor="statusColor"
+        :display="display"
       />
-      <div class="default-noti" @click="$emit('click')" 
-      @mouseover="paused = true"
-      @mouseleave="paused = false">
-        <Status :display="display" :height="setStatusHeight" :fill="fill" :statusColor="statusColor"/>
-        <div
-          class="default__body"
-          :class="{ 'default__body-left': display === 'left' && !fill }"
-        >
-          <div class="default__title" v-if="content.title" :style="titleStyle">
-            {{ content.title }}
-          </div>
+      <Card
+        v-else
+        :mainStyle="mainStyle"
+      >
+        <More 
+          @click="expandDefault" 
+          :display="display" 
+          :expand="expand" 
+          :color="buttonColor" 
+          v-if="expandable"
+        />
+        <Progress
+          class="progressdefault"
+          :progress="moveProgress"
+          v-if="!closeOnClick"
+          :color="progressColor"
+        />
+        <div class="default-noti" @click="$emit('click')" 
+        @mouseover="paused = true"
+        @mouseleave="paused = false">
+          <Status :display="display" :height="setStatusHeight" :fill="fill" :statusColor="statusColor"/>
           <div
-            class="default__message"
-            v-if="content.message"
-            :style="messageStyle"
+            class="default__body"
+            :class="{ 'default__body-left': display === 'left' && !fill }"
           >
-            {{ content.message }}
+            <div class="default__title" v-if="content.title" :style="titleStyle">
+              {{ content.title }}
+            </div>
+            <div
+              class="default__message"
+              v-if="content.message"
+              :style="messageStyle"
+            >
+              {{ content.message }}
+            </div>
           </div>
         </div>
-      </div>
-    </Card>
-    </div>
+      </Card>
+    </transition>
   </transition>
 </template>
 
