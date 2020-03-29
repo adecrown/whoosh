@@ -1,4 +1,4 @@
-import {status} from '../types/index'
+import {status} from '../../types/index'
 export const generateId = (i => () => i++)(0)
 
 export const isCustomStatusesDefined = (statuses?: Array<status>) =>{

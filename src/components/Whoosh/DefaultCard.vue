@@ -1,5 +1,18 @@
 <template>
   <transition name="slide-fade">
+    <Mobile 
+    v-if="isMobile"
+    @click="$emit('click')" 
+    :textColor="textColor" 
+    :content="content" 
+    :statusColor="statusColor"
+    :position="position"
+    :closeOnClick="closeOnClick"
+    :progressColor="progressColor"
+    :moveProgress="moveProgress"
+    :mobileDisplay="mobileDisplay"
+  />
+    <div v-else>
     <ExpandedCard 
       v-if="expand" 
       @expandDefault="expandDefault" 
@@ -48,19 +61,21 @@
         </div>
       </div>
     </Card>
+    </div>
   </transition>
 </template>
 
 <script lang="ts">
 import { Component, Emit, Prop, Vue, Watch } from "vue-property-decorator";
-import { isCustomStatusesDefined, TimerCup } from "./Util";
-import { DEFAULT_HEIGHT, MARGIN_GAP, status } from "./Constant";
+import { isCustomStatusesDefined, TimerCup } from "./helpers/Util";
+import { DEFAULT_HEIGHT, MARGIN_GAP, status } from "./helpers/Constant";
 import { CardContent,expandData } from "../types/index";
 import Progress from "./Progress.vue";
 import More from "./More.vue";
 import Card from "./Card.vue";
 import ExpandedCard from "./ExpandedCard.vue";
 import Status from "./Status.vue";
+import Mobile from "./Mobile.vue";
 
 @Component({
   components: {
@@ -68,7 +83,8 @@ import Status from "./Status.vue";
     Card,
     ExpandedCard,
     More,
-    Status
+    Status,
+    Mobile
   }
 })
 export default class DefaultCard extends Vue {
@@ -92,6 +108,9 @@ export default class DefaultCard extends Vue {
     }
   })
   private display!: "right" | "left";
+  @Prop({ type: Boolean, required: false, default:false}) private isMobile!: boolean;
+  @Prop({ type: String, required: false }) private mobileDisplay!: string;
+  
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   timer: any = {
@@ -202,6 +221,7 @@ export default class DefaultCard extends Vue {
       }
     }
   }
+
   useDuration(): number {
     return this.content.duration ? this.content.duration : this.masterDuration;
   }
@@ -276,5 +296,6 @@ export default class DefaultCard extends Vue {
   position: relative;
   float: left;
   width: 100%;
+  height: 100%;
 }
 </style>

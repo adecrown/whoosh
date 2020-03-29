@@ -1,6 +1,6 @@
 import Whoosh from "./Whoosh/Whoosh.vue";
-import { events } from "./Whoosh/events";
-import { isCustomStatusesDefined } from "./Whoosh/Util";
+import { events } from "./Whoosh/helpers/events";
+import { isCustomStatusesDefined } from "./Whoosh/helpers/Util";
 import { CardContent, WhooshOptions } from "./types/index";
 import Card from "./Whoosh/Card.vue";
 

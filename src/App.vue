@@ -25,16 +25,16 @@ export default class App extends Vue {
   pro = 20;
   list = [];
   masterDuration = 5;
-  size = {height:200};
+  size = { height: 200 };
   content = {
     title: "My name is go sgi sisd sidsoiosdvosdin wefewuifewfiun ",
     message: "This is my message ",
     status: "error"
   };
-  expandi={
-    data:"Just us",
-    noBackground:true
-  }
+  expandi = {
+    data: "Just us",
+    noBackground: true
+  };
 }
 </script>
 

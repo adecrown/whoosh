@@ -89,7 +89,9 @@ All props below are optional.
 | size          | Object  | {width:500,height:210} | use it to set your prefered width and height                           |
 | messageStyle  | Object  |                        | give a custom style to the message section                             |
 | titleStyle    | Object  |                        | give a custom style to the title section                               |
-|display| left or right | right| controls which side the notification should come out from |
+| display | left or right | right| controls which side the notification should come out from |
+| mobileDisplay | top or bottom | top | controls which position the notification should be displayed on mobile
+| isResponsive |  Boolean | true | handles responsiveness of notifications. Set it to false if you don't want the mobile view.
 
 #### Custom Status
 
