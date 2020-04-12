@@ -1,6 +1,6 @@
 <template>
   <div class="progress">
-    <div class="progress__indicator" :style="{'width':progress+'%','background-color':color}"></div>
+    <div class="progress__indicator" :style="{'width':progress+'%','background-color':color,height:height+'px'}"></div>
   </div>
 </template>
 
@@ -12,6 +12,8 @@ export default class Progress extends Vue {
   private progress!: number;
   @Prop({ type: String, required: false, default: "#dcd9d9" })
   private color!: string;
+  @Prop({ type: Number, required: false, default: 5 })
+  private height!: number;
 }
 </script>
 
@@ -24,7 +26,6 @@ export default class Progress extends Vue {
 .progress__indicator {
   width: 0%;
   max-width: 100%;
-  height: 5px;
   border-radius: 20px;
 }
 </style>

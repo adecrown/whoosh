@@ -14,7 +14,7 @@ export default class Card extends Vue {
 
 <style scoped>
 .card {
-  width: 500px;
+  width:500px;
   height: 200px;
   position: absolute;
   bottom: 10px;
@@ -22,6 +22,6 @@ export default class Card extends Vue {
   box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.2);
   background-color: white;
   display: inline-block;
-  z-index: 9999;
+  z-index: 9998;
 }
 </style>

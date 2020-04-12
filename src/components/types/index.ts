@@ -24,6 +24,10 @@ export interface TimerType {
   pause: Function;
   resume: Function;
 }
+export type SpaceController = {
+  id: number;
+  space: number
+}
 export type WhooshOptions = {
   statuses?: Array<status>;
 };

@@ -1,10 +1,21 @@
 <template>
-  <div>
-    <transition-group name="card">
+<div>
+  <div v-if="skin === 'launch'">
+     <Launch 
+      v-for="whoosh in whooshList" 
+      :key="whoosh.id"
+      :content="whoosh" 
+      :skin="skin"
+      :statusColor="statusColor"
+      @close="removeCard"
+    />
+  </div>
+    <transition-group name="card" tag="div" v-else>
       <DefaultCard
         v-for="(whoosh, index) in whooshList"
         :content="whoosh"
         :key="whoosh.id"
+        :skin="skin"
         :position="index"
         :list="whooshList"
         @close="removeCard"
@@ -35,10 +46,12 @@ import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from "./helpers/Constant";
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { CardContent } from "../types/index";
 import { isMobile } from "./helpers/Screen"
+import Launch from "./skins/Launch.vue"
 
 @Component({
   components: {
-    DefaultCard
+    DefaultCard,
+    Launch
   }
 })
 export default class Whoosh extends Vue {
@@ -55,6 +68,7 @@ export default class Whoosh extends Vue {
   @Prop({ type: Boolean, required:false, default: false }) private fill!: boolean;
   @Prop({ type: String, required:false, default: "black" }) private textColor!: string;
   @Prop({ type: Object, required: false }) private messageStyle!: object;
+  @Prop({ type: Boolean, required: false, default:false }) private queue!: boolean;
   @Prop({ type: Object, required: false }) private titleStyle!: object;
   @Prop({ type: String, required: false }) private progressColor!: string;
   @Prop({
@@ -82,6 +96,15 @@ export default class Whoosh extends Vue {
   })
   private mobileDisplay!: "top" | "bottom";
   @Prop({ type: Boolean,required:false, default: true }) private isResponsive!: boolean;
+   @Prop({
+    type: String,
+    required: false,
+    default: "default",
+    validator: value => {
+      return value === "default" || value === "launch";
+    }
+  })
+  private skin!: "default" | "launch";
 
   mounted() {
     if(this.isResponsive){
@@ -101,15 +124,14 @@ export default class Whoosh extends Vue {
 
   makeAWhooshList(event: CardContent) {
     event.id = generateId();
-    (this.activatePending || this.displayMobile) && this.whooshList.length
-    ? this.pendingWhooshList.push(event)
-    : this.whooshList.push(event);
+    const shouldQueue = this.activatePending || this.displayMobile || this.queue || this.skin === "launch";
+    shouldQueue && this.whooshList.length ? this.pendingWhooshList.push(event) : this.whooshList.push(event);
   }
 
   removeCard(event: CardContent) {
     this.whooshList = this.whooshList.filter(x => x.id !== event.id);
     event.onClose ? event.onClose() : null;
-    if(this.displayMobile){
+    if(this.displayMobile || this.queue || this.skin === "launch"){
       this.whooshList = [...this.pendingWhooshList.splice(0, 1)];
     }
   }

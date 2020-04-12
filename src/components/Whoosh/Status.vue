@@ -1,11 +1,11 @@
 <template>
-<div v-if="!fill">
+<div v-if="!fill" style="display:flex">
   <div v-if="top" class="status" :style="{ 'background-color': statusColor}"/>
   <div
     v-else
     class="status-side"
     :class="{ 'status-left': display === 'left' }"
-    :style="{ 'background-color': statusColor, height }"
+    :style="[{ 'background-color': statusColor, height },statusStyles]"
   />
 </div>
 </template>
@@ -19,6 +19,7 @@ export default class Status extends Vue {
   @Prop({ type: String, required: false }) private height!: string;
   @Prop({ type: String, required: false }) private width!: string;
   @Prop({ type: String, required: false }) private statusColor!: string;
+  @Prop({ type: Object, required: false }) private statusStyles!: object;
   @Prop({ type: Boolean, required: false,default:false }) private top!: boolean;
 }
 </script>
@@ -29,7 +30,6 @@ export default class Status extends Vue {
 }
 .status-side {
   width: 10px;
-  height: 190px;
   border-radius: 20px;
   margin-top: 5px;
   margin-left: 5px;
