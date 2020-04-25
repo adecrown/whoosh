@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <DefaultCard
+    <Launch
       :content="content"
       :list="list"
       :masterDuration="masterDuration"
@@ -8,7 +8,7 @@
       progressColor="red"
       :expandable="expandi"
       fill
-      display="left"
+      skin="simple"
     />
   </div>
 </template>
@@ -16,19 +16,22 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import DefaultCard from "./components/Whoosh/DefaultCard.vue";
+import Launch from "./components/Whoosh/skins/Launch.vue";
 @Component({
   components: {
-    DefaultCard
+    DefaultCard,
+    Launch
   }
 })
 export default class App extends Vue {
   pro = 20;
-  list = [];
+  list = [{id:1},{id:2},{id:3}];
   masterDuration = 5;
   size = { height: 200 };
   content = {
+    id:2,
     title: "My name is go sgi sisd sidsoiosdvosdin wefewuifewfiun ",
-    message: "This is my message ",
+    message: "This is my message",
     status: "error"
   };
   expandi = {

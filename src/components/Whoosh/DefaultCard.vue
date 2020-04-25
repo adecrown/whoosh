@@ -41,7 +41,7 @@
           v-if="!closeOnClick"
           :color="progressColor"
         />
-        <div class="default-noti" @click="$emit('click')" 
+        <div class="default-noti"  :id="content.id+'whooshHeight'" @click="$emit('click')" 
         @mouseover="paused = true"
         @mouseleave="paused = false">
           <Status :display="display" :height="setStatusHeight" :fill="fill" :statusColor="statusColor"/>
@@ -67,16 +67,16 @@
 </template>
 
 <script lang="ts">
-import { Component, Emit, Prop, Vue, Watch } from "vue-property-decorator";
-import { isCustomStatusesDefined, TimerCup } from "./helpers/Util";
-import { DEFAULT_HEIGHT, MARGIN_GAP, status } from "./helpers/Constant";
-import { CardContent,expandData } from "../types/index";
+import { Component, Mixins } from "vue-property-decorator";
+import { DEFAULT_HEIGHT, MARGIN_GAP } from "./helpers/Constant";
+import { CardContent } from "../types/index";
 import Progress from "./Progress.vue";
 import More from "./More.vue";
 import Card from "./Card.vue";
 import ExpandedCard from "./ExpandedCard.vue";
 import Status from "./Status.vue";
 import Mobile from "./Mobile.vue";
+import WhooshMixIn from "./mixins/whooshMixin"
 
 @Component({
   components: {
@@ -88,39 +88,8 @@ import Mobile from "./Mobile.vue";
     Mobile
   }
 })
-export default class DefaultCard extends Vue {
-  @Prop({ type: Number, default: 0 }) private position!: number;
-  @Prop({ type: Array, required: true }) private list!: Array<CardContent>;
-  @Prop({ type: Object, required: true }) private content!: CardContent;
-  @Prop({ type: Number, required: true }) private masterDuration!: number;
-  @Prop({ type: Boolean, required: false }) private closeOnClick!: boolean;
-  @Prop({ type: Boolean, required: false }) private fill!: boolean;
-  @Prop({ type: Object, required: false }) private expandable!: expandData;
-  @Prop({ type: String, required: false }) private textColor!: string;
-  @Prop({ type: Object, required: false }) private messageStyle!: object;
-  @Prop({ type: Object, required: false }) private titleStyle!: object;
-  @Prop({ type: String, required: false }) private progressColor!: string;
-  @Prop({ type: Object, required: true }) private size!: CardContent["size"];
-  @Prop({
-    type: String,
-    required: true,
-    validator: value => {
-      return value === "right" || value === "left";
-    }
-  })
-  private display!: "right" | "left";
-  @Prop({ type: Boolean, required: false, default:false}) private isMobile!: boolean;
-  @Prop({ type: String, required: false }) private mobileDisplay!: string;
+export default class DefaultCard extends Mixins(WhooshMixIn) {
   
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  timer: any = {
-    getTimeLeft: () => {
-      return 0;
-    }
-  };
-  paused = false;
-  now = 0;
   expand = false;
 
   get mainStyle() {
@@ -134,12 +103,7 @@ export default class DefaultCard extends Vue {
     };
   }
 
-  get moveProgress() {
-    const total = this.useDuration() * 1000; //1000 = 1 seconds;
-    return ((total - this.now) / total) * 100;
-  }
-
- get buttonColor(){
+  get buttonColor(){
     return this.expandable.buttonColor ? this.expandable.buttonColor : this.mainStyle['background-color']
   }
 
@@ -180,53 +144,6 @@ export default class DefaultCard extends Vue {
     return this.isProgressVisible(this.size!.height - MARGIN_GAP) + "px";
   }
 
-  get statusColor() {
-    if (isCustomStatusesDefined(this.content.statuses)) {
-      const isCustom = this.content.statuses!.find(
-        element => element.name === this.content.status
-      );
-      if (isCustom) {
-        return isCustom.color;
-      }
-    }
-    switch (this.content.status) {
-      case status.success:
-        return "#4caf50ad";
-      case status.warning:
-        return "#00bcd4b0";
-      case status.error:
-        return "#ff0000";
-      default:
-        return "#f7a104b5";
-    }
-  }
-
-  @Emit()
-  close() {
-    return this.content;
-  }
-
-  mounted() {
-    if (!this.closeOnClick) {
-      this.startTimer();
-    }
-  }
-
-  @Watch("paused")
-  pausedChanged(newVal: boolean, old: boolean) {
-    if (!this.closeOnClick) {
-      if (newVal) {
-        this.timer.pause();
-      } else {
-        this.timer.resume();
-      }
-    }
-  }
-
-  useDuration(): number {
-    return this.content.duration ? this.content.duration : this.masterDuration;
-  }
-
   isProgressVisible(height: number) {
     return this.closeOnClick ? height : height - 5;
   }
@@ -236,20 +153,7 @@ export default class DefaultCard extends Vue {
     this.$emit("expand", this.expand);
   }
 
-  startTimer() {
-    this.timer = new TimerCup(() => {
-      this.close();
-    }, this.useDuration() * 1000);
-    this.getSetTimeOutTimeLeft();
-  }
-  getSetTimeOutTimeLeft() {
-    const setIntervalTRef = setInterval(() => {
-      this.now = this.timer.getTimeLeft();
-      if (this.now <= 0) {
-        clearInterval(setIntervalTRef);
-      }
-    }, 17);
-  }
+ 
   add(whatsBelow: CardContent) {
     let whatsBelowSize: number;
     whatsBelowSize = this.size!.height;

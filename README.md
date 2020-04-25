@@ -92,6 +92,8 @@ All props below are optional.
 | display       | left or right | right                  | controls which side the notification should come out from                                   |
 | mobileDisplay | top or bottom | top                    | controls which position the notification should be displayed on mobile                      |
 | isResponsive  | Boolean       | true                   | handles responsiveness of notifications. Set it to false if you don't want the mobile view. |
+| skin | default or launch | default | set the notification skin type to use
+| queue | Boolean | false | wait for existing notification to close before showing a new one 
 
 #### Custom Status
 
@@ -132,4 +134,17 @@ The defualt statuses are still available along with your custom ones but you can
     name: 'error',
     color: 'black'
   }
+```
+
+#### launch skin notification (usage)
+Making use of the launch notification only require one prop, just add a skin prop to whoosh and specify 'launch' as the string. It's duration is fixed to 5 seconds.
+
+```javascript
+  <Whoosh skin="launch"/>
+```
+```javascript
+this.$whoosh({
+  status: "success",
+  message: "My launch message"
+});
 ```

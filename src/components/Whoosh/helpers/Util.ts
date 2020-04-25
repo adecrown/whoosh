@@ -19,7 +19,7 @@ export class TimerCup {
            this.cancel = function() {
              window.clearTimeout(timerId);
            };
-           this.pause = function() {
+           this.pause = function () {
              running = false;
              window.clearTimeout(timerId);
              remaining -= Date.now() - start;
