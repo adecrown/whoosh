@@ -142,8 +142,10 @@ export default class Whoosh extends Vue {
       this.whooshList = this.whooshList.filter(x => x.id === content.id);
     } else {
       this.activatePending = false;
-      this.whooshList.push(...this.pendingWhooshList);
-      this.pendingWhooshList = [];
+      if(!this.queue){
+        this.whooshList.push(...this.pendingWhooshList);
+        this.pendingWhooshList = [];
+      }
     }
   }
 
